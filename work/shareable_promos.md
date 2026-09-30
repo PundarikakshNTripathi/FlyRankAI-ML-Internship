@@ -7,7 +7,7 @@
 4. **The Evaluation:** Since we can't A/B test in the past, I evaluated the model using a Qini curve on a grouped holdout set to verify the targeting efficiency.
 5. **The Business Value:** The model generates a prioritized daily action queue. Comparing the model's top 50 recommendations against the legacy heuristic showed a significant efficiency gain in projected impressions for the exact same amount of editorial hours.
 
-## Executive Summary (FlyRank AI)
+## Executive Summary
 For my capstone project, I built a causal inference pipeline to optimize SEO content updates using 79 million rows of search performance data. I implemented an X-Learner architecture to predict the incremental traffic uplift of refreshing a page, rather than just classifying historical decay. This approach isolates high-ROI pages and provides the editorial team with a prioritized, data-driven action queue that significantly outperforms basic age-based heuristics.
 
 ## Project Retrospective
