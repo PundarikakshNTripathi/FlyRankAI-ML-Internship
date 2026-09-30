@@ -74,3 +74,6 @@ The full DuckDB data engineering pipeline, T-Learner causal inference model, and
 This research was built on the incredible **FlyRank ML Internship Dataset**. 
 Special thanks to the data engineering and product teams for providing rigorous, real-world search intelligence data.
 Data Source: [https://flyrank.ai](https://flyrank.ai)
+
+## 9. Appendix: Frontier Causal Architectures
+For a deep-dive into the theoretical progression from basic Meta-Learners to the X-Learner deployed here, as well as an exploration of FAANG-level architectures like Double Machine Learning (DML) and Causal Forests, see the [Advanced Causal SOTA Report](./advanced_causal_sota.md).
