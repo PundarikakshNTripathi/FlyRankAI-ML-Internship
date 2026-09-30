@@ -1,6 +1,6 @@
 ---
 layout: default
-title: "Prioritizing SEO Content Interventions via Causal Inference (T-Learner)"
+title: "Prioritizing SEO Content Interventions via Causal Inference (X-Learner)"
 ---
 
 # Prioritizing SEO Content Interventions via Causal Inference
@@ -8,8 +8,8 @@ title: "Prioritizing SEO Content Interventions via Causal Inference (T-Learner)"
 ## Abstract
 **Question:** How can we optimally route human editorial capacity to the most impactful content interventions? 
 **Data:** We utilize the FlyRank 79-million-row warehouse snapshot via DuckDB zero-copy analytics, analyzing anonymized time-series search performance data. 
-**Method:** We shift from standard decay classification to Causal Machine Learning by implementing a State-of-the-Art **T-Learner (Two-Learner Meta-Architecture)** to calculate the Individual Treatment Effect (ITE) of a content refresh. 
-**Result:** The dual-model pipeline successfully isolates high-yield pages, differentiating true causal uplift from mere correlation, drastically outperforming both static heuristics and standard S-Learners that suffer from regularization bias. 
+**Method:** We shift from standard decay classification to Causal Machine Learning by implementing a State-of-the-Art **X-Learner Meta-Architecture with Propensity Scoring** to calculate the Individual Treatment Effect (ITE) of a content refresh. 
+**Result:** The pipeline successfully isolates high-yield pages, differentiating true causal uplift from mere correlation, drastically outperforming both static heuristics and standard meta-learners that suffer from imbalance and regularization bias. 
 **Application:** This causal scoring system acts as a production-grade action queue, preventing the cannibalization of organic traffic and maximizing the ROI of human editorial hours.
 
 ---
@@ -27,10 +27,15 @@ We pipeline the massive **FlyRank ML Internship Dataset** (`flyrank_pseudonymize
 *   **Excluded:** All direct label-derived metrics (e.g., `trend_pct`, `trend_direction`) were rigorously excluded to prevent label leakage. The dataset ships strictly anonymized, meaning no raw text, URLs, or client identifiers were exposed to the model.
 
 ## 3. Methodology
-We implement a Causal Inference framework to predict Causal Uplift (Incremental Impressions) using a **T-Learner (Two-Learner Meta-Architecture)**.
+We implement a Causal Inference framework to predict Causal Uplift (Incremental Impressions) using an **X-Learner Meta-Architecture with Propensity Scoring**.
 
-**Why T-Learner?**
-Standard Single-Learners (S-Learners) train one model with a treatment flag, often suffering from regularization bias where the model simply ignores the treatment feature. The T-Learner overcomes this by training two entirely isolated Random Forest architectures: $\mu_0(X)$ exclusively on stale pages (Control), and $\mu_1(X)$ exclusively on fresh pages (Treatment). The Causal Uplift (CATE) is mathematically isolated as: $CATE = \mu_1(X) - \mu_0(X)$.
+**Why X-Learner?**
+Standard Single-Learners (S-Learners) train one model with a treatment flag, often suffering from regularization bias where the model simply ignores the treatment feature. T-Learners isolate models but struggle when treatment and control groups are imbalanced. 
+The X-Learner overcomes this through a rigorous 4-stage process:
+1. We train isolated outcome models for Treatment and Control groups.
+2. We impute the counterfactual treatment effects for all data points (e.g., predicting how control items would have reacted to treatment).
+3. We fit second-stage outcome models specifically to these imputed treatment effects.
+4. We apply a **Propensity Score Model** (estimating the probability of receiving treatment) to weight the final Causal Uplift (CATE), thoroughly debiasing the estimates.
 
 **Formulation:** 
 *   **Treatment (T):** `is_fresh` (Content updated within the last 180 days).
